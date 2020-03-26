@@ -6,7 +6,10 @@ from keras.layers.convolutional import Conv2D
 from keras.models import Sequential
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
+import datetime as dt
 
+print("hora  de inicio")
+print(dt.datetime.now().time())
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 ## Checking out the shapes involved in dataset
@@ -16,12 +19,12 @@ X_test = X_test.reshape(10000, 28, 28, 1)
 
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
-
 ## Declare the model
 model = Sequential()
 
 ## Declare the layers
-layer_1 = Conv2D(32, kernel_size=3, activation='relu', input_shape=(28, 28, 1))
+layer_1 = Conv2D(64, kernel_size=3, activation='relu', input_shape=(28, 28, 1))
+layer_2 = Conv2D(64, kernel_size=3, activation='relu')
 layer_2 = Conv2D(64, kernel_size=3, activation='relu')
 layer_3 = Flatten()
 layer_4 = Dense(10, activation='softmax')
@@ -42,3 +45,7 @@ model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=4)
 
 
 model.save('num_reader_medium.model')
+
+
+print("hora de fin")
+print(dt.datetime.now().time())

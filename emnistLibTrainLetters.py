@@ -11,7 +11,8 @@
 # from sklearn.preprocessing import MinMaxScaler
 from tensorflow import keras
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers import Dense, Dropout, Flatten
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D
+
 # from keras.layers.convolutional import Conv2D
 # from keras.layers.convolutional import MaxPooling2D
 # from keras import backend as K
@@ -24,16 +25,18 @@ images_train, labels_train = extract_training_samples('balanced')
 from emnist import extract_test_samples
 images_test, labels_test = extract_test_samples('balanced')
 
-print(images_train.shape)
-print(labels_train.shape)
-print(images_test.shape)
-print(labels_test.shape)
 
 dims = images_train.shape[1] * images_train.shape[2]
 
-print(labels_test.shape)
+## DENSE NN
 X_train = images_train.reshape(images_train.shape[0], dims)
 X_test = images_test.reshape(images_test.shape[0], dims)
+
+## CONV NN
+# X_train = images_train.reshape(images_train.shape[0], 28,28,1)
+# X_test = images_test.reshape(images_test.shape[0], 28,28,1)
+
+
 print("Training Shape:", X_train.shape)
 print("Testing Shape:", X_test.shape)
 
@@ -55,7 +58,7 @@ from tensorflow.keras.models import Sequential
 model = Sequential()
 
 #Layers
-
+## DENSE NN
 # 1 - number of elements (pixels) in each image
 # Dense layer - when every node from previous layer is connected to each node in current layer
 model.add(Dense(500, activation='relu'))
@@ -66,6 +69,12 @@ model.add(Dense(500, activation='relu'))
 # Output Layer - number of nodes corresponds to number of y labels
 model.add(Dense(num_classes, activation='softmax'))
 
+## CONV NN
+# model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(28, 28, 1)))
+# model.add(Conv2D(64, kernel_size=3, activation='relu'))
+# model.add(Conv2D(64, kernel_size=3, activation='relu'))
+# model.add(Flatten())
+# model.add(Dense(num_classes, activation='softmax'))
 
 # Compile Model
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop' , metrics=['accuracy'])
@@ -74,4 +83,9 @@ model.compile(loss='categorical_crossentropy', optimizer='rmsprop' , metrics=['a
 model.fit(X_train, y_train, batch_size=128, epochs=10, shuffle=True, verbose=2)
 
 # Save Model
-model.save("emnist_trained.h5")
+
+#SAVE DENSE
+model.save("emnist_trained_dense.h5")
+
+# #SAVE CNN
+# model.save("emnist_trained.h5")

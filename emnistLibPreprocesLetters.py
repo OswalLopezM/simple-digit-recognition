@@ -48,6 +48,11 @@ letters ={0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,
 20:'K',21:'l',22:'M',23:'N',24:'O',25:'P',26:'Q',27:'R',28:'S',29:'T',
 30:'u',31:'V',32:'W',33:'X',34:'Y',35:'Z',36:'a',37:'b',38:'d',39:'e',
 40:'f',41:'g',42:'h',43:'n',44:'q',45:'r',46:'t',47:'அ',48:'ஆ'}
+
+# # #DENSE Model
+# new_model = tf.keras.models.load_model('emnist_trained_dense.h5')
+
+#CNN Model
 new_model = tf.keras.models.load_model('emnist_trained.h5')
 
 digits_predicted = []
@@ -57,8 +62,12 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.preprocessing.image import img_to_array
 
 for digit in preprocessed_digits:
+    # # En caso de usar el model de DENSE
+    # prediction = new_model.predict(digit.flatten().reshape(-1, 28*28))  
 
-    prediction = new_model.predict(digit.flatten().reshape(-1, 28*28))  
+    # En caso de usar el model de CONVOLUTIONAL
+    prediction = new_model.predict(digit.reshape(1, 28, 28, 1))
+
     print ("---------------------------------------")
     print(prediction)
     
@@ -66,7 +75,7 @@ for digit in preprocessed_digits:
     print("\n\nFinal Output: {}".format(np.argmax(prediction)))
     print("\n\nFinal Output: {}"+str(letters[int(np.argmax(prediction))]))
     
-    digits_predicted.append(np.argmax(prediction))
+    digits_predicted.append(letters[int(np.argmax(prediction))])
     
     hard_maxed_prediction = np.zeros(prediction.shape)
     hard_maxed_prediction[0][np.argmax(prediction)] = 1
@@ -77,5 +86,5 @@ for digit in preprocessed_digits:
     # plt.imshow(digit.reshape(28, 28), cmap="gray")
     # plt.show()
 
-# print(digits_predicted)
+print(digits_predicted)
     
